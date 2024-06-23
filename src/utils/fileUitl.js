@@ -181,5 +181,52 @@ function deletePlugin(pluginName) {
   }
 }
 
+/**
+ * 获取根目录下 command 目录中的所有插件
+ * @returns {string[]} - 子目录名称数组
+ */
+function getAllCommand() {
+  try {
+    // 获取项目根目录
+    const rootDir = path.resolve(__dirname, '..');
+    const pluginDir = path.join(rootDir, 'command');
+    const filesAndDirs = fs.readdirSync(pluginDir);
+    // 过滤出其中的目录
+    const directories = filesAndDirs.filter(item => {
+      const itemPath = path.join(pluginDir, item);
+      return fs.statSync(itemPath).isDirectory();
+    });
 
-module.exports = { getData, setData, getAllPlugins, getPlugin, addPlugin,deletePlugin };
+    return directories;
+  } catch (error) {
+    console.error(`获取插件目录时出错: ${error.message}`);
+    return [];
+  }
+}
+
+/**
+ * 获取根目录下 command 目录中的某个子目录下 index.js 文件的内容
+ * @param {string} pluginName - 子目录名称
+ * @returns {string} - 文件内容
+ */
+function getCommand(pluginName) {
+  try {
+    // 获取项目根目录
+    const rootDir = path.resolve(__dirname, '..');
+    // 构建子目录的绝对路径
+    const pluginDir = path.join(rootDir, 'command', pluginName);
+    // 构建 index.js 文件的绝对路径
+    const indexPath = path.join(pluginDir, 'index.js');
+    // 检查文件是否存在
+    if (!fs.existsSync(indexPath)) {
+      throw new Error(`文件 ${indexPath} 不存在`);
+    }
+    // 读取文件内容
+    const fileContent = fs.readFileSync(indexPath, 'utf-8');
+    return fileContent;
+  } catch (error) {
+    console.error(`读取插件文件时出错: ${error.message}`);
+    return null;
+  }
+}
+module.exports = { getData, setData, getAllPlugins, getPlugin, addPlugin, deletePlugin, getAllCommand, getCommand };

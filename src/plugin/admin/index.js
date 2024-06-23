@@ -23,23 +23,33 @@ async function runScript(bot, ctx, params) {
 async function add(bot, ctx, params) {
     let whitelist = utils.getData('whitelist');
     const userId = ctx.message.from.id;
-    if (whitelist.includes(userId)) {
+    if (userId != process.env.USER_ID) {
+        ctx.reply("⚠️ 该用户无权限操作")
+        return;
+    }
+    const repliedUserId = ctx.message.reply_to_message.from.id;
+    if (whitelist.includes(repliedUserId)) {
         ctx.reply("哼，你已经是本bot的服务对象啦！")
         return;
     }
     whitelist.push(userId);
     whitelist = [...new Set(whitelist)];
-    utils.setData('whitelist', JSON.stringify(whitelist));
-    
+    utils.setData('whitelist', whitelist);
+
 }
 
 async function remove(bot, ctx, params) {
     let whitelist = utils.getData('whitelist');
     const userId = ctx.message.from.id;
-    if (!whitelist.includes(userId)) {
+    if (userId != process.env.USER_ID) {
+        ctx.reply("⚠️ 该用户无权限操作")
+        return;
+    }
+    const repliedUserId = ctx.message.reply_to_message.from.id;
+    if (!whitelist.includes(repliedUserId)) {
         ctx.reply("该用户本bot的服务名单之内，无需移除～")
         return;
     }
     whitelist = whitelist.filter(e => e != userId);
-    utils.setData('whitelist', JSON.stringify(whitelist));
+    utils.setData('whitelist', whitelist);
 }
