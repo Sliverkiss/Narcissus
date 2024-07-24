@@ -8,9 +8,20 @@ const files = fs.readdirSync(__dirname).filter(file => file.endsWith('.js') && f
 const methods = {};
 
 files.forEach(file => {
-  const filePath = path.join(__dirname, file);
-  const fileMethods = require(filePath);
-  Object.assign(methods, fileMethods);
+    const filePath = path.join(__dirname, file);
+    const regex = /\/([^\/.]+)\.[^.\/]+$/;
+    const match = filePath.match(regex);
+
+    if (match) {
+        console.log(match[1]); // 输出: logger
+    } else {
+        console.log('未找到匹配的文件名');
+    }
+    let obj = match[1];
+    const fileMethods = require(filePath);
+    global[obj] = fileMethods;
+    //加载全局方法
+    Object.assign(methods, fileMethods);
 });
 
 module.exports = methods;

@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const chokidar = require('chokidar');
-const logger = require('../utils/logger');
+const logger = require('../utils');
 
 class PluginManager {
   constructor(pluginDir) {
@@ -47,7 +47,8 @@ class PluginManager {
   executePlugins(ctx) {
     this.plugins.forEach(plugin => {
       try {
-        plugin.execute(ctx);
+        //如果是管理员，则执行命令
+        if($.isAdmin(ctx)||plugin.promise=='personal') plugin.execute(ctx);
       } catch (error) {
         logger.error(`执行插件 ${plugin.name} 时出错:`, error);
       }
