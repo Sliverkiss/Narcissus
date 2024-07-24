@@ -1,7 +1,7 @@
 module.exports = {
-    name: 'Hello Plugin',
+    name: '【Hitokito】',
     execute: async (ctx) => {
-        if (ctx.message && ctx.message.text === ',hitokoto') {
+        if (ctx.message && ctx.message.text === ',hitokito') {
             const hitokotoType = {
                 a: "动画",
                 b: "漫画",
