@@ -1,8 +1,6 @@
-require('dotenv').config();
-
 const $ = {
     isAdmin: (ctx) => {
-        return ctx.message.from.id=='5232284790';
+        return ctx.message.from.id==config.adminId;
     },
     toObj: (str, defaultValue = null) => {
         try {
