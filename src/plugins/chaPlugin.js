@@ -1,60 +1,64 @@
 module.exports = {
     name: '【查询机场订阅】',
     execute: async (ctx) => {
-        if (ctx.message && ctx.message.text === ',cha') {
-            const messageRaw = ctx.message.reply_to_message
-                ? (ctx.message.reply_to_message.caption || ctx.message.reply_to_message.text)
-                : (ctx.message.caption || ctx.message.text);
+        try {
+            if (ctx?.message && ctx?.message?.text === ',cha') {
+                const messageRaw = ctx?.message?.reply_to_message
+                    ? (ctx?.message?.reply_to_message?.caption || ctx?.message?.reply_to_message?.text)
+                    : (ctx.message.caption || ctx.message.text);
 
-            const urlList = messageRaw.match(/https?:\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/g);
-            if (!urlList) {
-                return ctx.reply('未找到订阅链接');
-            }
-
-            let finalOutput = '';
-
-            for (const url of urlList) {
-                try {
-                    const res = await fetch(url, { headers: { 'User-Agent': 'ClashforWindows/0.18.1' }, timeout: 5000 });
-                    if (res.status === 301 || res.status === 302) {
-                        const url1 = res.headers.get('location');
-                        res = await fetch(url1, { headers: { 'User-Agent': 'ClashforWindows/0.18.1' }, timeout: 5000 });
-                    }
-                    if (res.status === 200) {
-                        try {
-                            const info = res.headers.get('subscription-userinfo');
-                            const infoNum = info.match(/\d+/g);
-                            const timeNow = Math.floor(Date.now() / 1000);
-                            const airportName = await getFilenameFromUrl(url);
-
-                            const outputTextHead = `🎬订阅链接：\`${url}\`\n📇机场名：\`${airportName}\`\n⬆️已用上行：\`${strOfSize(parseInt(infoNum[0]))}\`\n⬇️已用下行：\`${strOfSize(parseInt(infoNum[1]))}\`\n♻️剩余：\`${strOfSize(parseInt(infoNum[2]) - parseInt(infoNum[1]) - parseInt(infoNum[0]))}\`\n🤦总共：\`${strOfSize(parseInt(infoNum[2]))}`;
-
-                            let outputText;
-                            if (infoNum.length >= 4) {
-                                const expireTime = parseInt(infoNum[3]) + 28800;
-                                const expireDate = new Date(expireTime * 1000).toISOString().split('T')[0];
-                                if (timeNow <= expireTime) {
-                                    const lastTime = expireTime - timeNow;
-                                    outputText = `${outputTextHead}\n🥹到期\`${expireDate}\`   🔜   \`${secToData(lastTime)}\``;
-                                } else {
-                                    outputText = `${outputTextHead}\n此订阅已于\`${expireDate}\`过期！`;
-                                }
-                            } else {
-                                outputText = `${outputTextHead}\n到期时间：\`未知\``;
-                            }
-                            finalOutput += `${outputText}\n\n`;
-                        } catch {
-                            finalOutput += `订阅链接：\`${url}\`\n机场名：\`${await getFilenameFromUrl(url)}\`\n无流量信息\n\n`;
-                        }
-                    } else {
-                        finalOutput += '无法访问\n\n';
-                    }
-                } catch {
-                    finalOutput += '连接错误\n\n';
+                const urlList = messageRaw.match(/https?:\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/g);
+                if (!urlList) {
+                    return ctx.reply('未找到订阅链接');
                 }
-            }
 
-            ctx.reply(finalOutput);
+                let finalOutput = '';
+
+                for (const url of urlList) {
+                    try {
+                        const res = await fetch(url, { headers: { 'User-Agent': 'ClashforWindows/0.18.1' }, timeout: 5000 });
+                        if (res.status === 301 || res.status === 302) {
+                            const url1 = res.headers.get('location');
+                            res = await fetch(url1, { headers: { 'User-Agent': 'ClashforWindows/0.18.1' }, timeout: 5000 });
+                        }
+                        if (res.status === 200) {
+                            try {
+                                const info = res.headers.get('subscription-userinfo');
+                                const infoNum = info.match(/\d+/g);
+                                const timeNow = Math.floor(Date.now() / 1000);
+                                const airportName = await getFilenameFromUrl(url);
+
+                                const outputTextHead = `🎬订阅链接：\`${url}\`\n📇机场名：\`${airportName}\`\n⬆️已用上行：\`${strOfSize(parseInt(infoNum[0]))}\`\n⬇️已用下行：\`${strOfSize(parseInt(infoNum[1]))}\`\n♻️剩余：\`${strOfSize(parseInt(infoNum[2]) - parseInt(infoNum[1]) - parseInt(infoNum[0]))}\`\n🤦总共：\`${strOfSize(parseInt(infoNum[2]))}`;
+
+                                let outputText;
+                                if (infoNum.length >= 4) {
+                                    const expireTime = parseInt(infoNum[3]) + 28800;
+                                    const expireDate = new Date(expireTime * 1000).toISOString().split('T')[0];
+                                    if (timeNow <= expireTime) {
+                                        const lastTime = expireTime - timeNow;
+                                        outputText = `${outputTextHead}\n🥹到期\`${expireDate}\`   🔜   \`${secToData(lastTime)}\``;
+                                    } else {
+                                        outputText = `${outputTextHead}\n此订阅已于\`${expireDate}\`过期！`;
+                                    }
+                                } else {
+                                    outputText = `${outputTextHead}\n到期时间：\`未知\``;
+                                }
+                                finalOutput += `${outputText}\n\n`;
+                            } catch {
+                                finalOutput += `订阅链接：\`${url}\`\n机场名：\`${await getFilenameFromUrl(url)}\`\n无流量信息\n\n`;
+                            }
+                        } else {
+                            finalOutput += '无法访问\n\n';
+                        }
+                    } catch {
+                        finalOutput += '连接错误\n\n';
+                    }
+                }
+
+                ctx.reply(finalOutput);
+            }
+        } catch (e) {
+            logger.error(e);
         }
     }
 };

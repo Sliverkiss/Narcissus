@@ -1,9 +1,13 @@
 module.exports = {
     name: 'Crazy4 Plugin',
     execute: async (ctx) => {
-        if (ctx.message && ctx.message.text === ',crazy4') {
-            const randomMessage = getRandomElement(crazy4Data);
-            ctx.reply(randomMessage);
+        try{
+            if (ctx.message && ctx.message.text === ',crazy4') {
+                const randomMessage = getRandomElement(crazy4Data);
+                ctx.reply(randomMessage);
+            }
+        }catch(e){
+            logger.error(e);
         }
     }
 };

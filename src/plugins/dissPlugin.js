@@ -1,18 +1,22 @@
 module.exports = {
     name: '【儒雅随和版祖安语录】',
     execute: async (ctx) => {
-        if (ctx.message && ctx.message.text === ',diss') {
-            try {
-                let message = "";
-                const dissMessage = await getDissMessage();
-                if (dissMessage) {
-                    message = await ctx.reply(dissMessage);
-                } else {
-                    message = await ctx.reply("出错了呜呜呜 ~ 试了好多好多次都无法访问到 API 服务器 。");
+        try{
+            if (ctx.message && ctx.message.text === ',diss') {
+                try {
+                    let message = "";
+                    const dissMessage = await getDissMessage();
+                    if (dissMessage) {
+                        message = await ctx.reply(dissMessage);
+                    } else {
+                        message = await ctx.reply("出错了呜呜呜 ~ 试了好多好多次都无法访问到 API 服务器 。");
+                    }
+                } catch (e) {
+                    message = await ctx.reply(`出错了呜呜呜 ~ ${e}`);
                 }
-            } catch (e) {
-                message = await ctx.reply(`出错了呜呜呜 ~ ${e}`);
             }
+        }catch(e){
+            logger.error(e);
         }
     }
 };
