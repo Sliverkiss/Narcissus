@@ -1,3 +1,5 @@
+
+
 const $ = {
     isAdmin: (ctx) => {
         return ctx.message.from.id==config.adminId;
