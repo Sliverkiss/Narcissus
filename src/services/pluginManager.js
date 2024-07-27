@@ -60,6 +60,34 @@ class PluginManager {
       this.watcher.close();
     }
   }
+
+  /**
+   * 通过url安装插件
+   * @param {string} url url
+   * @param {string} pluginName 插件名
+   */
+  async installFromUrl(url, pluginName) {
+    const pluginPath = path.join(this.pluginDir, pluginName, '.js');
+    if (fs.existsSync(pluginPath)) {
+      throw new Error(`插件:${pluginName} 已存在`);
+    }
+    // 发起 HTTP 请求
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP错误! 状态:${response.status}`);
+    }
+    const uint8Array = new Uint8Array(await response.arrayBuffer());
+    fs.writeFileSync(pluginPath, uint8Array);
+  }
+
+  /**
+   * 卸载插件
+   * @param pluginName 插件名
+   */
+  uninstallPlugin(pluginName) {
+    const pluginPath = path.join(this.pluginDir, pluginName, '.js');
+    fs.unlinkSync(pluginPath);
+  }
 }
 
 module.exports = PluginManager;
