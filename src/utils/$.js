@@ -1,8 +1,6 @@
-
-
 const $ = {
     isAdmin: (ctx) => {
-        return ctx.message.from.id==config.adminId;
+        return ctx?.message?.from?.id==config?.adminId;
     },
     toObj: (str, defaultValue = null) => {
         try {
