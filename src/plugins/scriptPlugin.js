@@ -8,7 +8,8 @@ module.exports = {
                 let data = await getData();
                 let res = extractData(data);
                 //转换成小写后过滤
-                let result = res?.filter(({ tagName }) => tagName?.toLowerCase().includes(keyWord.toLowerCase()));
+                let result = res?.filter(({ tagName }) => tagName?.toLowerCase().includes(keyWord.toLowerCase()))??[];
+                if(!result||result?.length==0) return await ctx.reply("⚠️ 未查询到相关脚本~", { parse_mode: 'HTML' });
                 //处理结果
                 let message = result.map(e => `<a href="${e.jsLink}">[${e?.tagName}]</a>｜<a href="${e?.imgUrl}">[图标链接]</a>`).join("\n");
                 await ctx.reply(message, { parse_mode: 'HTML' });
