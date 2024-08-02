@@ -2,13 +2,13 @@ const cheerio = require('cheerio');
 
 module.exports = {
     name: '【小火箭账号共享】',
-    promise: "personal",
+   	promise:"personal",
     execute: async (ctx) => {
         if (ctx.message && ctx.message.text === ',shadow') {
-            let accounts = await getShadowRocketId();
+            let accounts = await getAccounts();
             let message = [];
             accounts.map(e => {
-                message.push(`${getFlagEmoji(e.location)}｜⏰ ${e.lastCheck.split(" ")[1]} -> ${e.status == '正常' ? "✅" : "⚠️"}\n<pre>${e.username}\n${e.password}</pre>\n`);
+                message.push(`${getFlagEmoji(e.location)}｜⏰ ${e.lastCheck.split(" ")[1]} -> ${e.status?.match(/正常/) ? "✅" : "⚠️"}\n<pre>${e.username}\n${e.password}</pre>\n`);
             })
             message = `<b> Shadowrocket账号共享</b>\n\n${message.join("\n")}`
             message += `\n#小火箭共享 #shadowrocket`;
@@ -17,6 +17,68 @@ module.exports = {
     }
 };
 
+async function getAccounts() {
+    // shareapi
+    const shareList = [
+        'https://id.idunlock.cfd/shareapi/yBFJNnWjso',
+        'https://id.idunlock.cfd/shareapi/PyuZoYOzpd',
+        'https://id.idunlock.cfd/shareapi/mOvExPtksh',
+        'https://id.idunlock.cfd/shareapi/UidJsNGxAr',
+        'https://id.idunlock.cfd/shareapi/qrsnaxXiRU',
+    ];
+
+    // 使用 Promise.all 来并发请求
+    const promises = shareList.map(url => getIDByShareApi(url));
+    let result = []
+    try {
+        let res = await Promise.all(promises);
+        res?.map(e => result.push(...e));
+    } catch (e) {
+        logger.error(e);
+    }
+    return result;
+}
+
+
+//shareapi类型
+async function getIDByShareApi(url) {
+    try {
+        const opts = {
+            headers: {
+                'Accept-Encoding': `gzip, deflate, br`,
+                'Sec-Fetch-Mode': `navigate`,
+                'Connection': `keep-alive`,
+                'Accept': `text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8`,
+                'Referer': `https://id.ozc.me/`,
+                'Host': `id.idunlock.cfd`,
+                'User-Agent': `Mozilla/5.0 (iPad; CPU OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/111.0.5563.101 Mobile/15E148 Safari/604.1`,
+                'Sec-Fetch-Site': `cross-site`,
+                'Sec-Fetch-Dest': `iframe`,
+                'Accept-Language': `zh-CN,zh-Hans;q=0.9`
+            }
+        }
+        // Fetch the content from the URL
+        const response = await fetch(url, opts);
+        // Get the text content of the response
+        const data = await response.json();
+        let result = [];
+        data?.accounts.map(e => {
+            result.push({
+                location: e.region,
+                lastCheck: e.last_check,
+                status: e.message,
+                username: e.username,
+                password: e.password
+            })
+        })
+        return result;
+    } catch (e) {
+        logger.error(e);
+    }
+}
+
+
+//爬虫网页类型
 async function getShadowRocketId() {
     try {
         const opts = {
