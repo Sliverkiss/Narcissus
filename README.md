@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="https://raw.githubusercontent.com/Sliverkiss/GoodNight/main/IMG_4979.png" style="width: 240px;height: 240px;border-radius: 50%;object-fit: cover;overflow: hidden;""></img>
+    <img src="https://raw.githubusercontent.com/Sliverkiss/GoodNight/main/IMG_4979.png" style="width: 240px;height: 240px;border-radius: 50%;object-fit: cover;overflow: hidden;"></img>
         <h1>Narcissus</h1>
         <h3>A Telegram bot based on Node.js</h3>
 <a href="https://github.com/Sliverkiss/Narcissus/stargazers"><img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/Sliverkiss/Narcissus?color=yellow&logo=riseup&logoColor=yellow&style=flat-square"></a>
@@ -12,7 +12,7 @@
 
 1. **克隆仓库**
    ```bash
-   git clone https://github.com/your-repo/ddddocr-api.git
+   git clone https://github.com/Sliverkiss/Narcissus.git
    cd ddddocr-api
    ```
 2. **修改配置**
