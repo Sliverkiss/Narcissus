@@ -5,7 +5,7 @@ module.exports = {
         // 确保数据库表已创建
         await Chat.initialize();
         let chatList = await Chat.findAll();
-        if (ctx.message && (ctx?.chat?.type == 'group' || ctx?.chat?.type == 'supergroup')) {
+        if (ctx?.message && (ctx?.chat?.type == 'group' || ctx?.chat?.type == 'supergroup')) {
             if (!chatList.find(c => c.id == ctx?.chat?.id)) {
                 await Chat.createOrUpdate(ctx?.chat?.id, ctx?.chat?.title);
             }

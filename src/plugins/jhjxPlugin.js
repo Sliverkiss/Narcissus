@@ -3,7 +3,7 @@ module.exports = {
     name: '【聚合解析】',
     execute: async (ctx) => {
         try {
-            if (ctx.message && ctx?.message?.text?.startsWith(',jhjx')) {
+            if (ctx?.message && ctx?.message?.text?.startsWith(',jhjx')) {
                 let message = await ctx.reply("🐱正在解析中 . . .");
                 const text = ctx?.message?.reply_to_message?.text || ctx.message.text.split(' ').slice(1).join(' ');
                 const re_Url = text.match(/https?:\/\/[^\s\u4e00-\u9fa5\u3000-\u303F\uFF00-\uFFEF]+/g);

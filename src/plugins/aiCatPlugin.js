@@ -18,7 +18,7 @@ module.exports = {
             }
             //指令问答功能
             if (isCommand(ctx)) {
-                const text = ctx?.message?.reply_to_message?.text || ctx.message.text.split(' ').slice(1).join(' ');
+                const text = ctx?.message?.reply_to_message?.text || ctx?.message?.text?.split(' ').slice(1).join(' ');
                 let message = await ctx.reply("🐱正在思考中 . . .");
                 logger.info(text);
                 try {

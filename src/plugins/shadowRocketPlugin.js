@@ -4,7 +4,7 @@ module.exports = {
     name: '【小火箭账号共享】',
    	promise:"personal",
     execute: async (ctx) => {
-        if (ctx.message && ctx.message.text === ',shadow') {
+        if (ctx?.message && ctx?.message?.text === ',shadow') {
             let accounts = await getAccounts();
             let message = [];
             accounts.map(e => {

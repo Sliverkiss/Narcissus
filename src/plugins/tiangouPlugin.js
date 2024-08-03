@@ -2,7 +2,7 @@ module.exports = {
     name: '【舔狗日记】',
     execute: async (ctx) => {
         try{
-            if (ctx.message && ctx.message.text === ',tiangou') {
+            if (ctx?.message && ctx?.message?.text === ',tiangou') {
                 const response = await fetch(`https://api.52vmy.cn/api/wl/yan/tiangou`);
                 const res = await response.json();
                 if (res.code === 200) {

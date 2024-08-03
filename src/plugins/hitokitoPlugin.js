@@ -2,7 +2,7 @@ module.exports = {
     name: '【Hitokito】',
     execute: async (ctx) => {
         try {
-            if (ctx.message && ctx.message.text === ',hitokito') {
+            if (ctx?.message && ctx?.message?.text === ',hitokito') {
                 const hitokotoType = {
                     a: "动画",
                     b: "漫画",

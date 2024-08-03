@@ -1,5 +1,6 @@
 module.exports = {
     name: '【查询Quantmult X脚本】',
+    promise:"personal",
     execute: async (ctx) => {
         if (ctx?.message && ctx?.message?.text?.startsWith('/script')) {
             try {

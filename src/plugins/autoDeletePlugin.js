@@ -8,7 +8,7 @@ module.exports = {
         ctx.reply = async (...args) => {
             const options = args[1] || {};
             // 如果 ctx.message 存在，添加 reply_to_message_id 选项
-            if (ctx.message && ctx.message.message_id) {
+            if (ctx?.message && ctx?.message?.message_id) {
                 options.reply_to_message_id = ctx?.message?.reply_to_message?.message_id || ctx.message.message_id;
             }
             // 调用原始的 ctx.reply 方法并传递修改后的选项

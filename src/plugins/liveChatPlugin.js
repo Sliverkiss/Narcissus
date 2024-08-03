@@ -5,9 +5,9 @@ module.exports = {
     promise: "personal",
     execute: async (ctx) => {
         try {
-            if (ctx.message && ctx.chat.type == 'private') {
-                const chatId = ctx.chat.id;
-                const messageId = ctx.message.message_id;
+            if (ctx?.message && ctx?.chat?.type == 'private') {
+                const chatId = ctx?.chat?.id;
+                const messageId = ctx?.message?.message_id;
                 const adminUserId = config.adminId;
 
                 // 确保数据库表已创建

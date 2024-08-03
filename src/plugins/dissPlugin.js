@@ -2,7 +2,7 @@ module.exports = {
     name: '【儒雅随和版祖安语录】',
     execute: async (ctx) => {
         try{
-            if (ctx.message && ctx.message.text === ',diss') {
+            if (ctx?.message && ctx?.message?.text === ',diss') {
                 try {
                     let message = "";
                     const dissMessage = await getDissMessage();
