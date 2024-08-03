@@ -7,7 +7,9 @@
 <a href="https://t.me/sliverkiss_blog"><img alt="Telegram" src="https://img.shields.io/badge/chat-telegram-blue.svg?logo=telegram&style=flat-square"/></a> 
 </div>
 <h2>项目介绍</h2>
-这个项目的初衷是制作一个类似于```PagerMaid```的```Telegram Bot```,在能实现一些指令操作的同时，运行安装插件进行扩展。相较于```PagerMaid```来说，```Narcissus```的缺点是bot被官方所限制，难以实现bot与bot之间的交互，```PagerMaid```的一些插件没办法移植到```Narcissus```。优点也很明显：噶号概率大大降低。
+
+* 这个项目的初衷是制作一个类似于```PagerMaid```的```Telegram Bot```,在能实现一些指令操作的同时，运行安装插件进行扩展。
+* 相较于```PagerMaid```来说，```Narcissus```的缺点是bot被官方所限制，难以实现bot与bot之间的交互，```PagerMaid```的一些插件没办法移植到```Narcissus```。优点也很明显：可以使用小号来创建bot，然后给予大号权限，噶号概率大大降低。
 <h2>项目部署</h2>
 
 1. **克隆仓库**
