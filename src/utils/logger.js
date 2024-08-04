@@ -62,19 +62,25 @@ const loggerGlobalConfig = {
   },
   writer: [async (contextHolder, baseContext, lastMessage) => {
     console[baseContext.level](lastMessage);
-  }]
+  }],
+  enableLevels: ['trace', 'debug', 'info', 'warn', 'error']
 };
 
 class Logger {
+  /**
+   * 日志收集器启用级别，详见Level
+   */
+  #enableLevels;
   //日志收集器->context holder->获得日志组件(这个是全配置的，包含Logger单独的配置、小程序函数、日志输出)，提供一个默认输出的日志组件->消息构造器MessageBuilder(消息模板、消息函数)->日志日志输出器
   #logger;
 
-  constructor(logger) {
+  constructor(logger, enableLevels) {
+    this.#enableLevels = enableLevels;
     this.#logger = logger;
   }
 
   static getLogger(logger) {
-    return new Logger(logger);
+    return new Logger(logger, loggerGlobalConfig.enableLevels);
   }
 
   trace(message, error, ...data) {
@@ -98,10 +104,12 @@ class Logger {
   }
 
   async #invoker(level, message, error, ...data) {
-    const baseContext = getBaseContext(this.#logger, level, message, error, data);
-    const lastMsg = await loggerGlobalConfig.messageBuilder(contextHolder, baseContext);
-    for (const w of loggerGlobalConfig.writer) {
-      w(contextHolder, baseContext, lastMsg).catch((e) => {console.error(`logger writer error:${e}`);});
+    if (this.#enableLevels.includes(level)) {
+      const baseContext = getBaseContext(this.#logger, level, message, error, data);
+      const lastMsg = await loggerGlobalConfig.messageBuilder(contextHolder, baseContext);
+      for (const w of loggerGlobalConfig.writer) {
+        w(contextHolder, baseContext, lastMsg).catch((e) => {console.error(`logger writer error:${e}`);});
+      }
     }
   }
 }
@@ -134,6 +142,25 @@ class LoggerConfig {
    */
   static setMessageBuilder(messageBuilder) {
     loggerGlobalConfig.messageBuilder = messageBuilder;
+  }
+
+  /**
+   * 启用日志级别
+   * @param {string} levels 日志级别，小写
+   */
+  static enableLevel(...levels) {
+    if (levels == null || levels.length === 0) {
+      loggerGlobalConfig.enableLevels.length = 0;
+      return;
+    }
+    //校验
+    for (const level of levels) {
+      if (!Level[level.toUpperCase()]) {
+        console.error(`不支持日志级别:${level}`);
+        return;
+      }
+    }
+    loggerGlobalConfig.enableLevels = levels;
   }
 
   static #asyncWrapper(func) {
@@ -177,6 +204,7 @@ LoggerConfig.setMessageBuilder(async (contextHolder, baseContext) => {
   const base = `[${baseContext.level.toUpperCase()}] ${await contextHolder.timeFormat(baseContext)} - ${baseContext.message}`;
   return baseContext.error ? base + `\n${baseContext.error}` : base;
 });
+LoggerConfig.enableLevel(Level.INFO, Level.WARN, Level.ERROR);
 
 //todo 这个应该细分到每一个模块，但现在是重构，未来重写的时候再说
 const globalLogger = Logger.getLogger('Narcissus');
