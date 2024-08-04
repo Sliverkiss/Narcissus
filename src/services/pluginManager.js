@@ -48,9 +48,9 @@ class PluginManager {
     this.plugins.forEach(plugin => {
       try {
         //如果是管理员，则执行命令
-        if($.isAdmin(ctx)||plugin.promise=='personal') plugin.execute(ctx);
+        if($?.isAdmin(ctx)||plugin?.promise=='personal') plugin?.execute(ctx);
       } catch (error) {
-        logger.error(`执行插件 ${plugin.name} 时出错:`, error);
+        logger.error(`执行插件 ${plugin?.name} 时出错:`, error);
       }
     });
   }
