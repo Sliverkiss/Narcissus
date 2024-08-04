@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 9886
 
 # 启动应用程序
-CMD ["node", "app.js"]
+CMD ["node", "index.js"]
