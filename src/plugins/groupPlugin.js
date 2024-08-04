@@ -1,6 +1,7 @@
 const { Chat } = require('../database');
 module.exports = {
     name: '【检测群组】',
+    promise:"personal",
     execute: async (ctx) => {
         // 确保数据库表已创建
         await Chat.initialize();
