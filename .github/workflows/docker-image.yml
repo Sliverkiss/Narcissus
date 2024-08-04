@@ -1,7 +1,6 @@
 name: BuildDockerfileImage
 
 on:
-  # 防止 Fork 乱用 actions 设置只能手动触发构建
   workflow_dispatch:
   repository_dispatch:
     types: build_docker_image
@@ -29,8 +28,8 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./Dockerfile # Dockerfile 位置
+          file: ./Dockerfile
           platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
           push: true
           tags: |
-            tistzach/narcissus # 改成你自己的， dockerhub用户名/镜像名
+            tistzach/narcissus
