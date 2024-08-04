@@ -16,15 +16,24 @@ class PluginManager {
     const pluginFiles = fs.readdirSync(this.pluginDir).filter(file => 
       file.endsWith('.js') && file !== 'index.js'
     );
-
-    this.plugins = pluginFiles.map(file => {
-      const fullPath = path.join(this.pluginDir, file);
+    const prePlugins = [];
+    for (const pluginFile of pluginFiles) {
+      const fullPath = path.join(this.pluginDir, pluginFile);
       delete require.cache[require.resolve(fullPath)];
       const plugin = require(fullPath);
-      return plugin;
-    });
-
-    this.plugins.sort((a, b) => (b.priority||0) - (a.priority||0));
+      if ((typeof plugin.execute) !== 'function') {
+        logger.error(`发现疑似错误插件: ${fullPath}, 该插件中并无execute方法`);
+        continue;
+      }
+      if (!plugin.name) {
+        const suffix = pluginFile.indexOf('.');
+        const fileName = suffix === -1 ? pluginFile : pluginFile.substring(0, suffix);
+        plugin.name = fileName;
+        logger.warn(`找不到插件${fullPath}的插件名，使用文件名作为插件名:${fileName}`);
+      }
+      prePlugins.push(plugin);
+    }
+    this.plugins = prePlugins.sort((a, b) => (b.priority || 0) - (a.priority || 0));
   }
 
   watchPluginDirectory() {
