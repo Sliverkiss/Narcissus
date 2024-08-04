@@ -37,6 +37,7 @@
          ```
    b. 使用 node 命令直接运行：
       ```bash
+      npm install
       node index.js
       ```
 
