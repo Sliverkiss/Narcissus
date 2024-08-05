@@ -1,0 +1,29 @@
+name: Sync main to dev
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v3
+        with:
+          ref: main
+
+      - name: Checkout dev branch
+        run: |
+          git fetch origin dev
+          git checkout dev
+
+      - name: Merge main into dev
+        run: |
+          git merge origin/main --no-edit
+
+      - name: Push changes
+        run: |
+          git push origin dev
