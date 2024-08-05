@@ -1,7 +1,6 @@
 name: Sync main to dev
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
@@ -21,10 +20,10 @@ jobs:
           git fetch origin dev
           git checkout dev
 
-      - name: Merge main into dev
+      - name: Reset dev branch to main
         run: |
-          git merge origin/main --no-edit
+          git reset --hard origin/main
 
       - name: Push changes
         run: |
-          git push origin dev
+          git push origin dev --force
