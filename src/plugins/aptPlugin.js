@@ -10,7 +10,7 @@ module.exports = {
             if ($.command(ctx, ",apt remove")) {
                 const [, , pluginName] = ctx?.message?.text?.split(" ");
                 if (!pluginName) return await ctx.reply("请传入移除插件名称");
-                return await deletePlugin(pluginName);
+                return await deletePlugin(ctx,pluginName);
             }
             if ($.command(ctx, ",apt install")) {
                 const message = ctx?.message?.reply_to_message;
