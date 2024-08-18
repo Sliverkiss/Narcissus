@@ -38,7 +38,7 @@ async function handle(ctx) {
         let pluginContent = await response.text();
         //提取插件名称
         let pluginName = fileName.replace(/\.js$/, '');
-        return await addPlugin(pluginName, pluginContent);
+        return addPlugin(pluginName, pluginContent);
     }
     return {
         operation: '查询菜单:',
