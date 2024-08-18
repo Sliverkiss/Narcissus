@@ -1,43 +1,92 @@
-module.exports = {
-    name: 'AutoDelete Plugin',
-    priority: 1000,
-    execute: async (ctx, next) => {
-        // 存储原始的 ctx.reply 方法
-        const originalReply = ctx.reply.bind(ctx);
-        // 重写 ctx.reply 方法
-        ctx.reply = async (...args) => {
-            const options = args[1] || {};
-            // 如果 ctx.message 存在，添加 reply_to_message_id 选项
-            if (ctx?.message && ctx?.message?.message_id) {
-                options.reply_to_message_id = ctx?.message?.reply_to_message?.message_id || ctx.message.message_id;
-            }
-            // 调用原始的 ctx.reply 方法并传递修改后的选项
-            const sentMessage = await originalReply(args[0], options);
-            // 检查是否是 bot 发送的消息
-            if (sentMessage && sentMessage?.message_id) {
-                const messageId = sentMessage?.message_id;
-                const chatId = sentMessage?.chat.id;
-                let command=ctx?.message?.text?.split(" ")[0];
-                logger.info(`检测到指令:${command}`);
-                logger.info(`记录消息 -> Bot's message ID: ${messageId} in chat ${chatId}`);
+const fs = require('fs');
+const path = require('path');
 
-                // 设置定时删除
-                setTimeout(async () => {
-                    try {
-                        await ctx.telegram.deleteMessage(chatId, messageId);
-                        logger.info(
-                            `删除消息 -> Bot's message ID: ${messageId} deleted from chat ${chatId}`
-                        );
-                    } catch (error) {
-                        logger.error(
-                            `Failed to delete bot's message ID: ${messageId} from chat ${chatId}`,
-                            error
-                        );
-                    }
-                }, 6e4); // 90秒后删除消息
-            }
-            // 返回发送的消息
-            return sentMessage;
-        };
+module.exports = {
+    name: 'apt Plugin',
+    execute: async (ctx) => {
+        if (!ctx?.message?.text?.startsWith(',apt')) return;
+
+        try {
+            const res = await handle(ctx);
+            ctx.reply(`${res.operation}\n${res.message}`);
+        } catch (e) {
+            logger.error(e);
+            await ctx.reply($.toStr(e));
+        }
     }
 };
+
+async function handle(ctx) {
+    //移除插件
+    if ($.command(ctx, ",apt reomve")) {
+        const [, , pluginName] = ctx?.message?.text?.split(" ");
+        if (!pluginName) return { operation: "移除插件", message: "请传入移除插件名称" }
+        return deletePlugin(pluginName);
+    }
+    if ($.command(ctx, ",apt install")) {
+        const message = ctx?.message?.reply_to_message;
+        if (!message?.document) return { operation: "添加插件", message: "⚠️请在需要安装的插件下回复该指令～" };
+        //下载文件
+        // 获取文件信息
+        const file = message.document;
+        const fileId = file.file_id;
+        const fileName = file.file_name;
+        if (!fileName?.match(/\.js/)) throw new Error("插件格式错误");
+        // 下载文件
+        const fileLink = await ctx.telegram.getFileLink(fileId);
+        const response = await fetch(fileLink.href);
+        let pluginContent = await response.text();
+        //提取插件名称
+        let pluginName = fileName.replace(/\.js$/, '');
+        return await addPlugin(pluginName, pluginContent);
+    }
+    return {
+        operation: '查询菜单:',
+        message: ',apt install\t直接回复文件\n ,apt remove [插件名]'
+    };
+}
+
+/**
+ * 安装插件
+ * @param {string} pluginName - 插件名称
+ * @param {string} fileContent - 文件内容
+ * @returns {boolean} - 是否安装成功
+ */
+function addPlugin(pluginName, fileContent) {
+    // 获取项目根目录
+    const rootDir = path.resolve(__dirname, '..');
+    // 构建子目录的绝对路径
+    const pluginDir = path.join(rootDir, 'plugins', `${pluginName}.js`);
+
+    try {
+        // 写入文件内容
+        fs.writeFileSync(pluginDir, fileContent);
+        logger.info(`数据已写入到 ${pluginDir}`);
+        return { operation: "添加插件", message: `添加${pluginDir}插件成功喵～` };
+    } catch (error) {
+        logger.error(`写入文件时出错: ${error.message}`);
+        return { operation: "添加插件", message: `添加插件失败！${error}` };
+    }
+}
+
+/**
+ * 移除插件
+ * @param {string} pluginName - 插件名称
+ * @returns {string} - 文件内容
+ */
+function deletePlugin(pluginName) {
+    // 获取项目根目录
+    const rootDir = path.resolve(__dirname, '..');
+    // 构建子目录的绝对路径
+    const pluginDir = path.join(rootDir, 'plugins', `${pluginName}.js`);
+
+    try {
+        // 删除目录及其所有文件
+        fs.rmdirSync(pluginDir, { recursive: true });
+        logger.info(`成功移除插件 ${indexPath}!`);
+        return { operation: "移除插件", message: `移除${pluginDir}插件成功喵～` };;
+    } catch (error) {
+        logger.error(`写入文件时出错: ${error.message}`);
+        return { operation: "移除插件", message: `移除插件失败！${error}` };
+    }
+}
