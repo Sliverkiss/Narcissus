@@ -82,7 +82,7 @@ function deletePlugin(pluginName) {
 
     try {
         // 删除目录及其所有文件
-        fs.rmdirSync(pluginDir, { recursive: true });
+        fs.unlinkSync(pluginDir, { recursive: true });
         logger.info(`成功移除插件 ${indexPath}!`);
         return { operation: "移除插件", message: `移除${pluginName}插件成功喵～` };;
     } catch (error) {
