@@ -27,7 +27,7 @@ module.exports = {
                 let pluginContent = await response.text();
                 //提取插件名称
                 let pluginName = fileName.replace(/\.js$/, '');
-                return await addPlugin(pluginName, pluginContent);
+                return await addPlugin(ctx,pluginName, pluginContent);
             }
             return {
                 operation: '查询菜单:',
@@ -35,7 +35,6 @@ module.exports = {
             };
         } catch (e) {
             logger.error(e);
-            await ctx.reply($.toStr(e));
         }
     }
 };
@@ -46,7 +45,7 @@ module.exports = {
  * @param {string} fileContent - 文件内容
  * @returns {boolean} - 是否安装成功
  */
-async function addPlugin(pluginName, fileContent) {
+async function addPlugin(ctx,pluginName, fileContent) {
     // 获取项目根目录
     const rootDir = path.resolve(__dirname, '..');
     // 构建子目录的绝对路径
@@ -68,7 +67,7 @@ async function addPlugin(pluginName, fileContent) {
  * @param {string} pluginName - 插件名称
  * @returns {string} - 文件内容
  */
-async function deletePlugin(pluginName) {
+async function deletePlugin(ctx,pluginName) {
     // 获取项目根目录
     const rootDir = path.resolve(__dirname, '..');
     // 构建子目录的绝对路径
@@ -77,7 +76,7 @@ async function deletePlugin(pluginName) {
     try {
         // 删除目录及其所有文件
         fs.unlinkSync(pluginDir, { recursive: true });
-        logger.info(`成功移除插件 ${indexPath}!`);
+        logger.info(`成功移除插件 ${pluginDir}!`);
         await ctx.reply(`移除${pluginName}插件成功喵～`);
     } catch (error) {
         logger.error(`移除文件时出错: ${error.message}`);
