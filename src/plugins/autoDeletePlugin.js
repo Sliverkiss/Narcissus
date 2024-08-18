@@ -8,7 +8,7 @@ module.exports = {
 
         try {
             const res = await handle(ctx);
-            ctx.reply(`${res.operation}\n${res.message}`);
+            ctx.reply(res.message);
         } catch (e) {
             logger.error(e);
             await ctx.reply($.toStr(e));
@@ -18,7 +18,7 @@ module.exports = {
 
 async function handle(ctx) {
     //移除插件
-    if ($.command(ctx, ",apt reomve")) {
+    if ($.command(ctx, ",apt remove")) {
         const [, , pluginName] = ctx?.message?.text?.split(" ");
         if (!pluginName) return { operation: "移除插件", message: "请传入移除插件名称" }
         return deletePlugin(pluginName);
@@ -62,7 +62,7 @@ function addPlugin(pluginName, fileContent) {
         // 写入文件内容
         fs.writeFileSync(pluginDir, fileContent);
         logger.info(`数据已写入到 ${pluginDir}`);
-        return { operation: "添加插件", message: `添加${pluginDir}插件成功喵～` };
+        return { operation: "添加插件", message: `添加${pluginName}插件成功喵～` };
     } catch (error) {
         logger.error(`写入文件时出错: ${error.message}`);
         return { operation: "添加插件", message: `添加插件失败！${error}` };
@@ -84,7 +84,7 @@ function deletePlugin(pluginName) {
         // 删除目录及其所有文件
         fs.rmdirSync(pluginDir, { recursive: true });
         logger.info(`成功移除插件 ${indexPath}!`);
-        return { operation: "移除插件", message: `移除${pluginDir}插件成功喵～` };;
+        return { operation: "移除插件", message: `移除${pluginName}插件成功喵～` };;
     } catch (error) {
         logger.error(`写入文件时出错: ${error.message}`);
         return { operation: "移除插件", message: `移除插件失败！${error}` };
