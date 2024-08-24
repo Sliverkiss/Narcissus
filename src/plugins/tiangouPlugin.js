@@ -1,4 +1,4 @@
-module.exports = {
+export default  {
     name: '【舔狗日记】',
     execute: async (ctx) => {
         try{

@@ -1,5 +1,5 @@
-const { bot, pluginManager } = require('./src/bot');
-const logger = require('./src/utils/logger');
+import {bot, pluginManager} from './src/bot.js';
+import {globalLogger as logger} from './src/utils/logger.js';
 
 bot.launch().then(() => {
   logger.info('机器人已启动并正在运行！');

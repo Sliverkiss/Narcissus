@@ -1,6 +1,6 @@
-const { Message } = require('../database');
+import {Message} from '../database/index.js';
 
-module.exports = {
+export default {
     name: '【双向私聊机器人】',
     promise: "personal",
     execute: async (ctx) => {

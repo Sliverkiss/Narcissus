@@ -206,26 +206,8 @@ LoggerConfig.setMessageBuilder(async (contextHolder, baseContext) => {
 });
 LoggerConfig.enableLevel(Level.INFO, Level.WARN, Level.ERROR);
 
+export const globalLogger = Logger.getLogger('Narcissus');
+export default Logger;
 //todo 这个应该细分到每一个模块，但现在是重构，未来重写的时候再说
-const globalLogger = Logger.getLogger('Narcissus');
-/**
- * 构建java原生对象，只有一层，先暂时用这个，不然commonjs导出的拿不到原型中的方法，等后面换成module的形式再修复
- * @param obj 对象
- * @return {{}} JavaScript原生对象
- */
-const wrapMethodToJsObject = obj => {
-  const excludeBuiltIns = ['constructor','toString', 'valueOf', 'hasOwnProperty', 'isPrototypeOf', 'propertyIsEnumerable', 'toLocaleString'];
-  const jsObj = {};
-  protoObj = Object.getPrototypeOf(obj);
-  if (protoObj == null) {return {};}
-  Object.getOwnPropertyNames(protoObj).forEach(prop => {
-    if (typeof obj[prop] === 'function' && !excludeBuiltIns.includes(prop)) {
-      jsObj[prop] = (...params) => {return obj[prop](...params);};
-    }
-  });
-  return jsObj;
-};
-
-const logger = wrapMethodToJsObject(globalLogger);
-logger.warn('全局记录器初始化，请在未来替换成模块或者更细化的日志。');
-module.exports = logger;
+globalLogger.warn('全局记录器初始化，请在未来替换成模块或者更细化的日志。');
+global.logger = globalLogger;

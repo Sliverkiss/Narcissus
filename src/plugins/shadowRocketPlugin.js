@@ -1,6 +1,6 @@
-const cheerio = require('cheerio');
+import * as cheerio from 'cheerio';
 
-module.exports = {
+export default {
     name: '【小火箭账号共享】',
    	promise:"personal",
     execute: async (ctx) => {

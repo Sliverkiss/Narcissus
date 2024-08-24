@@ -1,13 +1,10 @@
-const fs = require('fs');
-const path = require('path');
-
 // 获取当前目录下的所有JS文件（排除index.js自己）
+import * as path from 'node:path';
+import * as fs from 'node:fs';
 const files = fs.readdirSync(__dirname).filter(file => file.endsWith('.js') && file !== 'index.js');
-
 // 导出对象，用于存储所有导入的方法
 const methods = {};
-
-files.forEach(file => {
+for (const file of files) {
     const filePath = path.join(__dirname, file);
     const regex = /\/([^\/.]+)\.[^.\/]+$/;
     const match = filePath.match(regex);
@@ -17,11 +14,11 @@ files.forEach(file => {
     } else {
         console.log('未找到匹配的文件名');
     }
-    let obj = match[1];
-    const fileMethods = require(filePath);
-    global[obj] = fileMethods;
+    const obj = match[1];
+    const fileMethods = await import(filePath);
+    global[obj] = fileMethods.default;
     //加载全局方法
     Object.assign(methods, fileMethods);
-});
+}
 
-module.exports = methods;
+export default methods;

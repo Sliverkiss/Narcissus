@@ -1,7 +1,4 @@
-
-
-
-const $ = {
+export const $ = {
     isAdmin: (ctx) => {
         return ctx?.message?.from?.id == config?.adminId;
     },
@@ -68,5 +65,3 @@ const $ = {
         return new Promise((resolve) => setTimeout(resolve, time))
     }
 }
-
-module.exports = $;
