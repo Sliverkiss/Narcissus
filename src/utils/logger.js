@@ -210,3 +210,4 @@ export const globalLogger = Logger.getLogger('Narcissus');
 export default Logger;
 //todo 这个应该细分到每一个模块，但现在是重构，未来重写的时候再说
 globalLogger.warn('全局记录器初始化，请在未来替换成模块或者更细化的日志。');
+global.logger = globalLogger;
