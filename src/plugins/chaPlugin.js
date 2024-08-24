@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     name: '【查询机场订阅】',
     execute: async (ctx) => {
         try {

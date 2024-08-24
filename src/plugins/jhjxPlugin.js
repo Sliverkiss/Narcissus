@@ -1,5 +1,4 @@
-
-module.exports = {
+export default  {
     name: '【聚合解析】',
     execute: async (ctx) => {
         try {

@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     name: '【儒雅随和版祖安语录】',
     execute: async (ctx) => {
         try{

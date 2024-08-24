@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     name: 'AutoDelete Plugin',
     priority: 1000,
     execute: async (ctx, next) => {

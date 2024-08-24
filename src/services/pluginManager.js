@@ -1,8 +1,10 @@
-const fs = require('fs');
-const path = require('path');
-const chokidar = require('chokidar');
-const logger = require('../utils');
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+import * as chokidar from 'chokidar'
+import Logger from '../utils/logger.js';
+import * as url from 'node:url';
 
+const logger = Logger.getLogger('PluginManager');
 class PluginManager {
   constructor(pluginDir) {
     this.plugins = [];
@@ -12,15 +14,13 @@ class PluginManager {
     this.watchPluginDirectory();
   }
 
-  loadPlugins() {
-    const pluginFiles = fs.readdirSync(this.pluginDir).filter(file => 
-      file.endsWith('.js') && file !== 'index.js'
-    );
+  async loadPlugins() {
+    const pluginFiles = fs.readdirSync(this.pluginDir).filter(file =>
+                                                                  file.endsWith('.js') && file !== 'index.js');
     const prePlugins = [];
     for (const pluginFile of pluginFiles) {
       const fullPath = path.join(this.pluginDir, pluginFile);
-      delete require.cache[require.resolve(fullPath)];
-      const plugin = require(fullPath);
+      const plugin = (await import(url.pathToFileURL(fullPath))).default;
       if ((typeof plugin.execute) !== 'function') {
         logger.error(`发现疑似错误插件: ${fullPath}, 该插件中并无execute方法`);
         continue;
@@ -71,4 +71,4 @@ class PluginManager {
   }
 }
 
-module.exports = PluginManager;
+export default PluginManager;

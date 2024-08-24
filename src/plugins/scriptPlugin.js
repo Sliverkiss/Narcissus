@@ -1,4 +1,4 @@
-module.exports = {
+export default  {
     name: '【查询Quantmult X脚本】',
     promise: "personal",
     execute: async (ctx) => {

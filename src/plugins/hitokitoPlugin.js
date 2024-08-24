@@ -1,4 +1,4 @@
-module.exports = {
+export default  {
     name: '【Hitokito】',
     execute: async (ctx) => {
         try {
