@@ -205,9 +205,8 @@ LoggerConfig.setMessageBuilder(async (contextHolder, baseContext) => {
   return baseContext.error ? base + `\n${baseContext.error}` : base;
 });
 LoggerConfig.enableLevel(Level.INFO, Level.WARN, Level.ERROR);
-
-export const globalLogger = Logger.getLogger('Narcissus');
-export default Logger;
-//todo 这个应该细分到每一个模块，但现在是重构，未来重写的时候再说
+const globalLogger = Logger.getLogger('Narcissus');
 globalLogger.warn('全局记录器初始化，请在未来替换成模块或者更细化的日志。');
-global.logger = globalLogger;
+export {Logger};
+export default globalLogger;
+//todo 这个应该细分到每一个模块，但现在是重构，未来重写的时候再说
