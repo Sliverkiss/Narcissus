@@ -2,7 +2,8 @@ import {Telegraf} from 'telegraf';
 import PluginManager from './services/pluginManager.js';
 import * as path from 'node:path';
 import {CONFIG} from './config/index.js';
-import * as url from 'node:url';
+import {$} from './utils/$.js';
+global.$ = $;
 //全局属性
 global.config = CONFIG;
 const bot = new Telegraf(config.botToken);
