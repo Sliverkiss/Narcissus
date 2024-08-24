@@ -1,7 +1,7 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import * as chokidar from 'chokidar'
-import Logger from '../utils/logger.js';
+import * as chokidar from 'chokidar';
+import {Logger} from '../utils/logger.js';
 import * as url from 'node:url';
 
 const logger = Logger.getLogger('PluginManager');
