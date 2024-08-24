@@ -1,4 +1,4 @@
-export const $ = {
+export default {
     isAdmin: (ctx) => {
         return ctx?.message?.from?.id == config?.adminId;
     },
