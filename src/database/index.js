@@ -1,4 +1,5 @@
-const sqlite3 = require('sqlite3').verbose();
+import sqlite3 from 'sqlite3';
+const sqlite3_instance = sqlite3.verbose();
 
 class Model {
   constructor(tableName, fields) {
@@ -6,7 +7,7 @@ class Model {
     this.fields = fields;
   }
 
-  static db = new sqlite3.Database('bot.sqlite');
+  static db = new sqlite3_instance.Database('bot.sqlite');
 
   static async query(sql, params = []) {
     return new Promise((resolve, reject) => {
@@ -118,6 +119,4 @@ class Chat extends Model {
   }
 }
 
-
-
-module.exports = { Model,Chat, UserChat, Message };
+export { Model,Chat, UserChat, Message };

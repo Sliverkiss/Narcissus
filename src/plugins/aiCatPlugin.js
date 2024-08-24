@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     name: '【猫娘AI】',
     promise: "personal",
     execute: async (ctx) => {

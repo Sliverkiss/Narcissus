@@ -1,16 +1,17 @@
-const { Telegraf } = require('telegraf');
-const path = require('path');
-const config = require('./config');
-const PluginManager = require('./services/pluginManager');
-const logger = require('./utils/logger');
-
-
+import {Telegraf} from 'telegraf';
+import PluginManager from './services/pluginManager.js';
+import * as path from 'node:path';
+import {CONFIG} from './config/index.js';
+import {$} from './utils/$.js';
+global.$ = $;
+//全局属性
+global.config = CONFIG;
 const bot = new Telegraf(config.botToken);
-const pluginManager = new PluginManager(path.join(__dirname, 'plugins'));
+const pluginManager = new PluginManager(path.join(import.meta.dirname, 'plugins'));
 
 bot.use((ctx, next) => {
   pluginManager.executePlugins(ctx);
   return next();
 });
 
-module.exports = { bot, pluginManager };
+export {bot, pluginManager};

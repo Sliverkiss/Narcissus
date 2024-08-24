@@ -1,4 +1,4 @@
-module.exports = {
+export default  {
     name: '给作者打赏',
     promise: "personal",
     execute: (ctx) => {

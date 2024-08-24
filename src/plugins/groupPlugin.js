@@ -1,5 +1,6 @@
-const { Chat } = require('../database');
-module.exports = {
+import {Chat} from '../database/index.js';
+
+export default {
     name: '【检测群组】',
     promise:"personal",
     execute: async (ctx) => {

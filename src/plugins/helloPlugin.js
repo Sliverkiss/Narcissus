@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     name: 'Start Plugin',
     promise: "personal",
     execute: (ctx) => {

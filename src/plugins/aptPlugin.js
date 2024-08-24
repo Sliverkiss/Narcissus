@@ -1,7 +1,7 @@
-const fs = require('fs');
-const path = require('path');
+import * as path from 'node:path';
+import * as fs from 'node:fs';
 
-module.exports = {
+export default {
     name: 'apt Plugin',
     execute: async (ctx) => {
         try {
