@@ -42,6 +42,9 @@ export default {
  * @returns {boolean} - 是否安装成功
  */
 async function addPlugin(ctx,pluginName, fileContent) {
+    // 获取当前模块的路径
+    const __filename = new URL(import.meta.url).pathname;
+    const __dirname = path.dirname(__filename);
     // 获取项目根目录
     const rootDir = path.resolve(__dirname, '..');
     // 构建子目录的绝对路径
@@ -64,6 +67,9 @@ async function addPlugin(ctx,pluginName, fileContent) {
  * @returns {string} - 文件内容
  */
 async function deletePlugin(ctx,pluginName) {
+    // 获取当前模块的路径
+    const __filename = new URL(import.meta.url).pathname;
+    const __dirname = path.dirname(__filename);
     // 获取项目根目录
     const rootDir = path.resolve(__dirname, '..');
     // 构建子目录的绝对路径
