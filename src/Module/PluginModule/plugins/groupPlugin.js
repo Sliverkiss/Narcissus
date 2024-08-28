@@ -22,7 +22,7 @@ export default {
 };
 
 //记录群组
-class Chat extends Sqlite {
+class Chat extends MySqlite {
   static tableName = 'chat';
   static fields = ['chatId', 'chatName'];
     static async findByChatId(chatId) {

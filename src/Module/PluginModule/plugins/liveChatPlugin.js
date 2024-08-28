@@ -56,7 +56,7 @@ export default {
     }
 };
 
-class Message extends Sqlite {
+class Message extends MySqlite {
   static tableName = 'messages';
   static fields = ['adminMessageId', 'userId'];
 
