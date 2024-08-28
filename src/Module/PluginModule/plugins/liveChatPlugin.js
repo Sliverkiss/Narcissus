@@ -1,5 +1,3 @@
-import {Message} from '../database/index.js';
-
 export default {
     name: '【双向私聊机器人】',
     promise: "personal",
@@ -57,3 +55,23 @@ export default {
         }
     }
 };
+
+class Message extends Sqlite {
+  static tableName = 'messages';
+  static fields = ['adminMessageId', 'userId'];
+
+  static async findByAdminMessageId(adminMessageId) {
+    const sql = `SELECT * FROM ${this.tableName} WHERE adminMessageId = ?`;
+    const rows = await this.query(sql, [adminMessageId]);
+    return rows[0];
+  }
+
+  static async createOrUpdate(adminMessageId, userId) {
+    const existingMessage = await this.findByAdminMessageId(adminMessageId);
+    if (existingMessage) {
+      return this.update(existingMessage.id, { userId });
+    } else {
+      return this.create({ adminMessageId, userId });
+    }
+  }
+}

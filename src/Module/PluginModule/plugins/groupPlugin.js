@@ -1,5 +1,3 @@
-import {Chat} from '../database/index.js';
-
 export default {
     name: '【检测群组】',
     promise:"personal",
@@ -22,3 +20,23 @@ export default {
         }
     }
 };
+
+//记录群组
+class Chat extends Sqlite {
+  static tableName = 'chat';
+  static fields = ['chatId', 'chatName'];
+    static async findByChatId(chatId) {
+    const sql = `SELECT * FROM ${this.tableName} WHERE chatId = ?`;
+    const rows = await this.query(sql, [chatId]);
+    return rows[0];
+  }
+    
+  static async createOrUpdate(chatId, chatName) {
+    const existingMessage = await this.findByChatId(chatId);
+    if (existingMessage) {
+      return this.update(existingMessage.id, { chatName });
+    } else {
+      return this.create({ chatId, chatName });
+    }
+  }
+}

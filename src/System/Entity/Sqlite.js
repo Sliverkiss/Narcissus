@@ -1,7 +1,7 @@
 import sqlite3 from 'sqlite3';
 const sqlite3_instance = sqlite3.verbose();
 
-class Model {
+export default class Model {
   constructor(tableName, fields) {
     this.tableName = tableName;
     this.fields = fields;
@@ -78,45 +78,3 @@ class UserChat extends Model {
     return this.query(sql, [chatId]);
   }
 }
-
-class Message extends Model {
-  static tableName = 'messages';
-  static fields = ['adminMessageId', 'userId'];
-
-  static async findByAdminMessageId(adminMessageId) {
-    const sql = `SELECT * FROM ${this.tableName} WHERE adminMessageId = ?`;
-    const rows = await this.query(sql, [adminMessageId]);
-    return rows[0];
-  }
-
-  static async createOrUpdate(adminMessageId, userId) {
-    const existingMessage = await this.findByAdminMessageId(adminMessageId);
-    if (existingMessage) {
-      return this.update(existingMessage.id, { userId });
-    } else {
-      return this.create({ adminMessageId, userId });
-    }
-  }
-}
-
-//记录群组
-class Chat extends Model {
-  static tableName = 'chat';
-  static fields = ['chatId', 'chatName'];
-    static async findByChatId(chatId) {
-    const sql = `SELECT * FROM ${this.tableName} WHERE chatId = ?`;
-    const rows = await this.query(sql, [chatId]);
-    return rows[0];
-  }
-    
-  static async createOrUpdate(chatId, chatName) {
-    const existingMessage = await this.findByChatId(chatId);
-    if (existingMessage) {
-      return this.update(existingMessage.id, { chatName });
-    } else {
-      return this.create({ chatId, chatName });
-    }
-  }
-}
-
-export { Model,Chat, UserChat, Message };

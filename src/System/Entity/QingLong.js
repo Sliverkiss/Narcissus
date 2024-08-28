@@ -1,4 +1,4 @@
-export class QingLong {
+export default class QingLong {
     /**
      * 对接青龙API
      * @param {*} HOST http://127.0.0.1:5700

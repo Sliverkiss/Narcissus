@@ -1,4 +1,4 @@
-export class MongoDB {
+export default class MongoDB {
     /**
      * Initializes MongoDB client
      * @param {*} BASE_URL Base URL of the API
