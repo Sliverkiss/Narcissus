@@ -6,7 +6,7 @@ import { CONFIG } from './System/Config/index.js';
 global.config = CONFIG;
 
 const bot = new Telegraf(config.botToken);
-const pluginManager = new PluginManager(path.join(import.meta.dirname, 'plugins'));
+const pluginManager = new PluginManager(path.join(import.meta.dirname, 'Module/PluginModule/plugins'));
 
 bot.use((ctx, next) => {
     pluginManager.executePlugins(ctx);
