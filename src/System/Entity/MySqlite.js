@@ -63,18 +63,3 @@ export default class Model {
     return this.query(sql, [id]);
   }
 }
-
-class UserChat extends Model {
-  static tableName = 'user_chats';
-  static fields = ['userId', 'chatId'];
-
-  static async findByUserId(userId) {
-    const sql = `SELECT * FROM ${this.tableName} WHERE userId = ?`;
-    return this.query(sql, [userId]);
-  }
-
-  static async findByChatId(chatId) {
-    const sql = `SELECT * FROM ${this.tableName} WHERE chatId = ?`;
-    return this.query(sql, [chatId]);
-  }
-}
