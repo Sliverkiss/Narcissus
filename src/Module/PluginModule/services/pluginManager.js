@@ -21,10 +21,7 @@ class PluginManager {
     const prePlugins = [];
     for (const pluginFile of pluginFiles) {
       const fullPath = path.join(this.pluginDir, pluginFile);
-      // 清除缓存
-      const require = createRequire(import.meta.url); // 使用 createRequire 从当前模块中获取 require
-      delete require.cache[require.resolve(fullPath)];
-      const plugin = (await import(url.pathToFileURL(fullPath))).default;
+      const plugin = (await import(url.pathToFileURL(fullPath)+`?${Date.now()}`)).default;
     
       if ((typeof plugin.execute) !== 'function') {
         logger.error(`发现疑似错误插件: ${fullPath}, 该插件中并无execute方法`);
