@@ -16,7 +16,7 @@ export default {
             return defaultValue
         }
     },
-    toYml(jsonObj, indent = 0) {
+    toYml:(jsonObj, indent = 0)=> {
         const result = [];
         const indentation = '  '.repeat(indent); // 控制缩进
 
