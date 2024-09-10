@@ -16,17 +16,20 @@ export default {
             return defaultValue
         }
     },
-    toTable: (json, defaultValue = null, ...args) => {
-        try {
-            jsonObject = { ...jsonObject, ...args }
-            const keys = Object.keys(jsonObject);
-            const keyValueStrings = keys.map(key => `${key}:${jsonObject[key]}`);
-            const resultString = keyValueStrings.join('\n');
+    toYml(jsonObj, indent = 0) {
+        const result = [];
+        const indentation = '  '.repeat(indent); // 控制缩进
 
-            return resultString;
-        } catch (error) {
-            return defaultValue;
+        for (let key in jsonObj) {
+            if (typeof jsonObj[key] === 'object' && jsonObj[key] !== null) {
+                result.push(`${indentation}${key}:`);
+                result.push(this.toYml(jsonObj[key], indent + 1)); // 递归处理嵌套对象
+            } else {
+                result.push(`${indentation}${key}: ${jsonObj[key]}`);
+            }
         }
+
+        return result.join('\n');
     },
     command: (ctx, str) => {
         return ctx?.message?.text?.startsWith(str);
