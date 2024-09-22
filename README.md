@@ -26,15 +26,13 @@
    有三种方式可以启动应用：
 
    a. 使用 docker启动：
-      1. 构建 Docker 镜像
-      2. 打包镜像
+      1. 复制下面这条命令
           ```bash
-          docker build -t narcissus .
+          docker run -d -p 9886:9886 --name narcissus -e BOT_TOKEN="填入bot的token" -e ADMIN_ID="填入tg管理员的id" tistzach/narcissus:latest
           ```
-      3. 启动镜像
-         ```bash
-         docker run -d --name narcissus-container narcissus
-         ```
+      2. 将上面指令中BOT_TOKEN和ADMIN_ID的值替换为自己的
+      3. 在终端直接运行修改后的命令
+
    b. 使用 node 命令直接运行：
       ```bash
       npm install
