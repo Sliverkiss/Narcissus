@@ -2,10 +2,12 @@ export default {
     name: 'AutoDelete Plugin',
     priority: 1000,
     execute: async (ctx, next) => {
+        try{
         // 存储原始的 ctx.reply 方法
         const originalReply = ctx.reply.bind(ctx);
         // 重写 ctx.reply 方法
         ctx.reply = async (...args) => {
+            try{
             const options = args[1] || {};
             // 如果 ctx.message 存在，添加 reply_to_message_id 选项
             if (ctx?.message && ctx?.message?.message_id) {
@@ -38,6 +40,8 @@ export default {
             }
             // 返回发送的消息
             return sentMessage;
+            }catch(e){}
         };
+        }catch(e){}
     }
 };
