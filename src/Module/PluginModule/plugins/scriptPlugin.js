@@ -45,7 +45,7 @@ function extractData(arr) {
 }
 
 async function getData() {
-    const response = await fetch(`https://gist.githubusercontent.com/Sliverkiss/a7496bd073820942b44a9b36874aaf4c/raw/sliverkiss.gallery.json`);
+    const response = await fetch(`https://github.mimic.us.kg/Sliverkiss/waf/main/sliverkiss.gallery.json`);
     const data = await response.json();
     return data.task;
 }
