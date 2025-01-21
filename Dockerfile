@@ -1,5 +1,5 @@
-# 使用官方Node.js 22镜像作为基础镜像
-FROM node:22
+# 使用官方Node.js 18镜像作为基础镜像
+FROM node:18
 
 # 创建并设置工作目录
 WORKDIR /funmika
